@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getFlights, addFlight, updFlight } from "./flightAPI";
+import { getFlights, addFlight, updFlight, deleteFlight } from "./flightAPI";
 
 const initialState = {
   status: "idle",
@@ -21,6 +21,15 @@ export const addFlightAsync = createAsyncThunk(
   async (newFlight) => {
     const response = await addFlight(newFlight);
     return response.data;
+  }
+);
+// call the methods in the API
+export const deleteFlightAsync = createAsyncThunk(
+  "flight/deleteFlight",
+  async (id) => {
+    console.log(id);
+    const response = await deleteFlight(id.id);
+    return id.id;
   }
 );
 
@@ -64,6 +73,9 @@ export const flightSlice = createSlice({
         );
         updFlight.destination = action.payload.destination;
         updFlight.companyName = action.payload.companyName;
+      }) .addCase(deleteFlightAsync.fulfilled, (state, action) => {
+          console.log(action.payload)
+        state.flights = state.flights.filter(x=> x.id !==  action.payload);
       });
   },
 });

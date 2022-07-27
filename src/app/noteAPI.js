@@ -1,9 +1,14 @@
 import axios from "axios";
-const MY_SERVER = " http://localhost:3005/flights/";
+const MY_SERVER = "http://127.0.0.1:8000/api/notes/";
 
-export function getFlights() {
+export function getnotes() {
+  let token = localStorage.getItem("token");
   return new Promise((resolve) =>
-    axios(MY_SERVER).then((res) => resolve({ data: res.data }))
+    axios(MY_SERVER, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => resolve({ data: res.data }))
   );
 }
 
@@ -15,7 +20,7 @@ export function addFlight(newFlight) {
 
 export function deleteFlight(id) {
   return new Promise((resolve) =>
-    axios.delete(MY_SERVER+ id).then((res) => resolve({ data: res.data }))
+    axios.delete(MY_SERVER + id).then((res) => resolve({ data: res.data }))
   );
 }
 
