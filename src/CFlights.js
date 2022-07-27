@@ -7,6 +7,8 @@ const CFlights = () => {
   const dispatch = useDispatch();
   const [companyName, setCompanyName] = useState("");
   const [destination, setDestination] = useState("");
+  const [search, setSearch] = useState("")
+  const [srcCompany, setsrcCompany] = useState("")
   useEffect(() => {
     dispatch(getFlightsAsync());
   }, []);
@@ -21,8 +23,10 @@ const CFlights = () => {
         <button onClick={()=>dispatch(addFlightAsync({companyName:companyName,destination:destination }))}>Add flight</button>
       </div>
       <h1> ELALA - terminal </h1>
+      Search : <input onChange={(e) => setSearch(e.target.value)} />
+      srcCompany : <input onChange={(e) => setsrcCompany(e.target.value)} />
       {myFlights.length}
-      {myFlights.map((flight, i) => (
+      {myFlights.filter(x=> x.destination.includes(search) && x.companyName.includes(srcCompany) ).map((flight, i) => (
         <div key={i}>
           {flight.destination}, {flight.companyName} , {flight.id}<button onClick={()=>dispatch(updFlightAsync({
               destination:destination,
